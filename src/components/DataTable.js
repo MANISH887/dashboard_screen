@@ -4,8 +4,6 @@ import "./../styles/DataTable.scss";
 
 const DataTable = ({ columns, data }) => {
   const {
-    getTableProps,
-    getTableBodyProps,
     headerGroups,
     prepareRow,
     page,
@@ -34,30 +32,31 @@ const DataTable = ({ columns, data }) => {
   return (
     <div>
       <input value={globalFilter || ""} onChange={(e) => setGlobalFilter(e.target.value || undefined)} placeholder={`Global search...`} className="input_box" />
-      <table className="data-table" {...getTableProps()}>
+      <table className="data-table">
         <thead>
           {headerGroups.map((headerGroup, index) => (
-            <tr key={index} {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, columnIndex) => (
-                <th key={columnIndex}>
-                  <div className="table_header_content">
-                    {column.render("Header")}
-                    <span {...column.getHeaderProps(column.getSortByToggleProps())}>{column.isSorted ? (column.isSortedDesc ? " ⇅" : " ⇵") : "⇅"}</span>
-                  </div>
-                </th>
-              ))}
+            <tr key={index}>
+              {headerGroup.headers.map((column, columnIndex) => {
+                const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
+                return (
+                  <th key={columnIndex}>
+                    <div key={key} {...rest} className="table_header_content">
+                      {column.render("Header")}
+                      <span>{column.isSorted ? (column.isSortedDesc ? " ⇩" : " ⇧") : ""}</span>
+                    </div>
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody>
           {page.map((row, rowIndex) => {
             prepareRow(row);
             return (
-              <tr key={rowIndex} {...row.getRowProps()}>
+              <tr key={rowIndex}>
                 {row.cells.map((cell, cellIndex) => (
-                  <td key={cellIndex} {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </td>
+                  <td key={cellIndex}>{cell.render("Cell")}</td>
                 ))}
               </tr>
             );
