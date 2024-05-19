@@ -4,7 +4,7 @@
   color: #ecf0f1;
   height: 100vh;
   position: fixed;
-
+  transition: transform 0.3s ease;
   h2 {
     padding: 20px;
   }
@@ -26,5 +26,33 @@
         }
       }
     }
+  }
+}
+
+.sidebar.open {
+  transform: translateX(0%);
+}
+
+.toggle-btn {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 50%;
+    height: 100%;
+    transform: translateX(-100%);
+  }
+
+  .toggle-btn {
+    display: flex;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
   }
 }
