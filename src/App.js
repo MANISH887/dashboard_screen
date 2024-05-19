@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Overview from "./pages/Overview";
@@ -7,11 +7,26 @@ import Analytics from "./pages/Analytics";
 import "./App.scss";
 
 function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
-    <Router>
-      <div className="App">
-        <Sidebar />
+    <div className="app-container">
+      <Router>
+        <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+          <Sidebar closeSidebar={closeSidebar} />
+        </div>
         <div className="main-content">
+          <button className="toggle-btn" onClick={toggleSidebar}>
+            {isSidebarOpen ? "⏴" : "≡"}
+          </button>
           <Routes>
             <Route path="/overview" element={<Overview />} />
             <Route path="/reports" element={<Reports />} />
@@ -19,8 +34,8 @@ function App() {
             <Route path="/" element={<Overview />} />
           </Routes>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 
